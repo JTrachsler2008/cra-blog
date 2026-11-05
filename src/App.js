@@ -80,13 +80,34 @@ function NewPost({ onCreate }) {
   );
 }
 
+const STORAGE_KEY = 'cra-blog-posts';
+
+function loadPosts() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored ? JSON.parse(stored) : initialPosts;
+  } catch {
+    return initialPosts;
+  }
+}
+
+function savePosts(posts) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+  } catch {
+    // Storage unavailable (e.g. private mode): posts stay in memory only
+  }
+}
+
 function App() {
-  const [posts, setPosts] = useState(initialPosts);
+  const [posts, setPosts] = useState(loadPosts);
 
   function createPost({ title, author, content }) {
     const id = Math.max(0, ...posts.map((p) => p.id)) + 1;
     const date = new Date().toISOString().slice(0, 10);
-    setPosts([...posts, { id, title, author, date, content }]);
+    const updated = [...posts, { id, title, author, date, content }];
+    setPosts(updated);
+    savePosts(updated);
     return id;
   }
 
