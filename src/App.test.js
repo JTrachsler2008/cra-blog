@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('zeigt die Liste aller Beiträge', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  expect(screen.getByText('Alle Beiträge')).toBeInTheDocument();
+  expect(screen.getByText('Willkommen im CRA-Blog')).toBeInTheDocument();
 });
